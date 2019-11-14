@@ -16,11 +16,11 @@ public class DataSourceFactory {
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
         //here your database properties
         try {
-            mysqlDataSource.setDatabaseName("crudapp");
-            mysqlDataSource.setServerName("localhost");
+            mysqlDataSource.setDatabaseName("database");
+            mysqlDataSource.setServerName("servername");
             mysqlDataSource.setPort(3306);
-            mysqlDataSource.setUser("root");
-            mysqlDataSource.setPassword("Crudapplication123");
+            mysqlDataSource.setUser("user");
+            mysqlDataSource.setPassword("password");
             mysqlDataSource.setServerTimezone("UTC");
         } catch (SQLException sqle) {
             System.err.println("SQL Exception: " + sqle.getMessage());
