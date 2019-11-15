@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
         try {
             boolean isSaved = userService.save(new User(firstName, lastName, password, username));
             if(isSaved){
-                resp.sendRedirect("/login");
+                resp.sendRedirect("/");
             }else {
                 resp.sendRedirect("/register");
             }

@@ -19,23 +19,15 @@ public class UserService {
     }
 
 
-    public Optional<User> find(String login, String password) throws SQLException {
+    public boolean isExist(String login, String password) throws SQLException {
         String sql = "SELECT id, first_name, last_name, password, username FROM user WHERE username = ? AND password = ?";
-        int id = 0;
-        String firstName = "", lastName = "", userPassword = "", username = "";
         Connection connection = DataSourceFactory.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, login);
         statement.setString(2, password);
         ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            id = resultSet.getInt("id");
-            firstName = resultSet.getString("first_name");
-            lastName = resultSet.getString("last_name");
-            password = resultSet.getString("password");
-            username = resultSet.getString("username");
-        }
-        return Optional.of(new User(id, firstName, lastName, password, username));
+
+        return resultSet.next();
     }
 
 

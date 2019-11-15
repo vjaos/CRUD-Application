@@ -16,7 +16,7 @@ public class DataSourceFactory {
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
         //here your database properties
         try {
-            mysqlDataSource.setDatabaseName("database");
+            mysqlDataSource.setDatabaseName("dbname");
             mysqlDataSource.setServerName("servername");
             mysqlDataSource.setPort(3306);
             mysqlDataSource.setUser("user");
