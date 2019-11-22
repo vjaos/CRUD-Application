@@ -57,7 +57,7 @@ public class CRUDServlet extends HttpServlet {
                     break;
             }
         } catch (SQLException sqle) {
-            System.err.println("SQL Exception: " + sqle.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, sqle.getMessage());
         }
 
     }
@@ -69,7 +69,7 @@ public class CRUDServlet extends HttpServlet {
         int quantity = Integer.parseInt(req.getParameter("quantity"));
         Stuff stuff = new Stuff(id, name, description, quantity);
         stuffService.update(stuff);
-        resp.sendRedirect("list");
+        resp.sendRedirect("/list");
     }
 
 
@@ -85,7 +85,7 @@ public class CRUDServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         Stuff stuff = new Stuff(id);
         stuffService.delete(stuff);
-        resp.sendRedirect("list");
+        resp.sendRedirect("/list");
     }
 
 
@@ -93,10 +93,15 @@ public class CRUDServlet extends HttpServlet {
         String name = req.getParameter("name");
         String description = req.getParameter("description");
         int quantity = Integer.parseInt(req.getParameter("quantity"));
-
-        Stuff stuff = new Stuff(name, description, quantity);
-        stuffService.save(stuff);
-        resp.sendRedirect("list");
+        User user = getUser(req);
+        if (user != null) {
+            Stuff stuff = new Stuff(name, description, quantity);
+            stuff.setUserId(user.getId());
+            stuffService.save(stuff);
+            resp.sendRedirect("/list");
+        } else {
+            throw new SQLException("User is null");
+        }
     }
 
     private void showNewForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -106,10 +111,42 @@ public class CRUDServlet extends HttpServlet {
 
 
     private void showListStuff(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ServletException, IOException {
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/jsp/StuffList.jsp");
-        List<Stuff> listStuff = stuffService.findAll();
-        req.setAttribute("listStuff", listStuff);
-        dispatcher.forward(req, resp);
+        User user = getUser(req);
+        if (user != null) {
+            List<Stuff> listStuff = stuffService.findAllbyUserId(user.getId());
+            req.setAttribute("listStuff", listStuff);
+            dispatcher.forward(req, resp);
+        } else {
+            req.setAttribute("listStuff", null);
+            dispatcher.forward(req, resp);
+        }
+
     }
 
+
+    private User getUser(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
+        String authHeader = req.getHeader("Authorization");
+        StringTokenizer st = new StringTokenizer(authHeader);
+        if (st.hasMoreTokens()) {
+            String basic = st.nextToken();
+            if ("Basic".equalsIgnoreCase(basic)) {
+                String credentials = new String(Base64.decodeBase64(st.nextToken()), "UTF-8");
+                int p = credentials.indexOf(":");
+                if (p != -1) {
+                    String username = credentials.substring(0, p).trim();
+                    String password = credentials.substring(p + 1).trim();
+                    Optional<User> user = userService.find(username, password);
+                    return user.orElse(null);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 }

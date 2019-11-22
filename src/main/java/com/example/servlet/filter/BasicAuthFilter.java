@@ -47,7 +47,7 @@ public class BasicAuthFilter implements Filter {
                             String username = credentials.substring(0, p).trim();
                             String password = credentials.substring(p + 1).trim();
 
-                            if (!userService.isExist(username, password)) {
+                            if (userService.find(username, password).isEmpty()) {
                                 sendAuthError(resp, "INVALID USERNAME OR PASSWORD");
                             }else {
                                 filterChain.doFilter(servletRequest, servletResponse);

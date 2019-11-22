@@ -5,7 +5,7 @@ public class Stuff {
     private String name;
     private String description;
     private int quantity;
-
+    private int userId;
 
     public Stuff() {
     }
@@ -56,6 +56,14 @@ public class Stuff {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

@@ -3,11 +3,8 @@ package com.example.util;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import javax.sql.DataSource;
-import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Properties;
 
 public class DataSourceFactory {
     private final DataSource dataSource;
