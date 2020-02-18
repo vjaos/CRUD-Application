@@ -20,7 +20,7 @@ then configure DataSourceFactory
     mysqlDataSource.setServerTimezone("UTC");
 ```
 In order to access the site you need to register an account. 
-You can do it at /register page
+You can do it at `/register` page
 
 ## Built With
 * [Maven](https://maven.apache.org/) - Dependency Management
