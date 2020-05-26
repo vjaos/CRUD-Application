@@ -1,5 +1,6 @@
 # CRUD Application
-Simple CRUD-service implementation using Java Servlet API
+
+Simple CRUD application implementation using Java Servlet API
 
 ### Prerequisites
 
